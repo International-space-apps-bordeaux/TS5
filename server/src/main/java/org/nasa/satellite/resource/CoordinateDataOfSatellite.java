@@ -1,19 +1,23 @@
-package org.nasa.satellite;
+package org.nasa.satellite.resource;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import java.util.SimpleTimeZone;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceRef;
 
+import org.nasa.satellite.domain.CoordinatePosition;
 import org.nasa.ws.proxy.BFieldModelOptions;
 import org.nasa.ws.proxy.BFieldModelParameters;
 import org.nasa.ws.proxy.BFieldTraceOptions;
@@ -28,11 +32,9 @@ import org.nasa.ws.proxy.DegreeFormat;
 import org.nasa.ws.proxy.DistanceFromOptions;
 import org.nasa.ws.proxy.DistanceUnits;
 import org.nasa.ws.proxy.ExternalBFieldModel;
-import org.nasa.ws.proxy.FileResult;
 import org.nasa.ws.proxy.FilteredCoordinateOptions;
 import org.nasa.ws.proxy.FootpointRegion;
 import org.nasa.ws.proxy.FormatOptions;
-import org.nasa.ws.proxy.GraphRequest;
 import org.nasa.ws.proxy.Hemisphere;
 import org.nasa.ws.proxy.HemisphereOptions;
 import org.nasa.ws.proxy.InternalBFieldModel;
@@ -48,7 +50,6 @@ import org.nasa.ws.proxy.PolarMapOrientation;
 import org.nasa.ws.proxy.ProjectionCoordinateSystem;
 import org.nasa.ws.proxy.RegionFilterOptions;
 import org.nasa.ws.proxy.RegionOptions;
-import org.nasa.ws.proxy.Result;
 import org.nasa.ws.proxy.ResultStatusCode;
 import org.nasa.ws.proxy.SatelliteData;
 import org.nasa.ws.proxy.SatelliteDescription;
@@ -62,9 +63,12 @@ import org.nasa.ws.proxy.TimeSeriesGraphOptions;
 import org.nasa.ws.proxy.Trace;
 import org.nasa.ws.proxy.ValueOptions;
 
-import com.sun.xml.internal.ws.developer.JAXWSProperties;
+import com.google.gson.Gson;
+import com.sun.jersey.api.client.ClientResponse.Status;
 
-public class WsClient {
+
+@Path("/api/satellites/trajectory")
+public class CoordinateDataOfSatellite {
 	@WebServiceRef(wsdlLocation = "http://sscweb.gsfc.nasa.gov/WS/ssc/2/SatelliteSituationCenterService?wsdl")
 	static SatelliteSituationCenterService service;
 
@@ -75,38 +79,27 @@ public class WsClient {
 		DATE_FORMATTER = new SimpleDateFormat("yyyy/DDD HH:mm:ss");
 		DATE_FORMATTER.setTimeZone(UTC_TIME_ZONE);
 	}
+	
+	@GET
+	@Path("{satelliteId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCoordinateData(@PathParam("satelliteId") String satelliteId) throws Exception{
+		Gson gson = new Gson(); 
+		List<CoordinatePosition> coordinatePositions = retrieveCoordinateDataFromNasa(satelliteId); 
+		String jsonString = gson.toJson(coordinatePositions); 
+		return Response.status(Status.OK).header("Access-Control-Allow-Origin", "*").entity(jsonString).build(); 
+	}
 
-	public static void main(String args[]) throws Exception {
+	private List<CoordinatePosition> retrieveCoordinateDataFromNasa(String satelliteId) throws Exception {
 
-		// ---------- SSC Web Services code ----------
 		System.setProperty("http.agent","WsExample (" + System.getProperty("os.name") + " "+ System.getProperty("os.arch") + ")");
 
 		SatelliteSituationCenterService service = new SatelliteSituationCenterService();
+		SatelliteSituationCenterInterface ssc = service.getSatelliteSituationCenterPort();
 
-		SatelliteSituationCenterInterface ssc = service
-				.getSatelliteSituationCenterPort();
-		// ---------- end SSC Web Services code ----------
-
-		Map<String, Object> requestContextMap = ((BindingProvider) ssc)
-				.getRequestContext();
-		// request context map
-
-		String dumpMsgs = System.getProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump");
-
-		if (dumpMsgs == null || !dumpMsgs.equals("true")) {
-
-			// Optional to request Fast Infoset (ITU-T Rec. X.891 |
-			// ISO/IEC 24824-1) encoding ("binary XML").
-			requestContextMap.put(JAXWSProperties.CONTENT_NEGOTIATION_PROPERTY,"pessimistic");
-		}
-
-		Date t1 = new Date();
-		Date t2 = new Date();
-		t1 = new Date();
 		// ---------- SSC Web Services code ----------
 		List<SatelliteDescription> satellites = ssc.getAllSatellites();
 		// ---------- end SSC Web Services code ----------
-		t2 = new Date();
 //		for (SatelliteDescription sat : satellites) {
 //			System.out.println("  " + sat.getId() + "  " + sat.getName() + "  "
 //					+ sat.getResolution() + "s " + sat.getStartTime() + " - "
@@ -115,7 +108,8 @@ public class WsClient {
 //		};
 		Calendar calendar = GregorianCalendar.getInstance(UTC_TIME_ZONE);
 		Calendar endDate = (Calendar) calendar.clone();
-		calendar.add(Calendar.DATE, -1);
+		//calendar.add(Calendar.DATE, -1);
+		calendar.add(Calendar.MINUTE, -20);
 		Calendar startDate = (Calendar) calendar.clone();
 
 		DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
@@ -135,237 +129,58 @@ public class WsClient {
 						endDate.get(Calendar.MINUTE),
 						endDate.get(Calendar.SECOND),
 						endDate.get(Calendar.MILLISECOND), 0);
-		String[] sats = new String[] { "polar" };
-
-		t1 = new Date();
-
 		// ---------- SSC Web Services code ----------
-		SatelliteSpecification satSpec = new SatelliteSpecification();
-		satSpec.setId("iss");
-		satSpec.setResolutionFactor(60);
-
-		GraphRequest graphRequest = new GraphRequest();
-		graphRequest.getSatellites().add(satSpec);
-		graphRequest.setBeginTime(xmlStart);
-		graphRequest.setEndTime(xmlEnd);
-		graphRequest.setOrbitOptions(getTestOrbitOptions());
-
-		FileResult graphResult = ssc.getGraphs(graphRequest);
+		DataResult dataResult = ssc.getData(dataRequest(xmlStart, xmlEnd, satelliteId));
 		// ---------- end SSC Web Services code ----------
-
-		t2 = new Date();
-
-//		if (graphResult.getStatusCode() == ResultStatusCode.ERROR) {
-//
-//			printResult("getGraphs", graphResult);
-//
-//			return;
-//		}
-		System.out.println("\nOrbit getGraphs results:");
-		printFileResult("getGraphs", graphResult);
-
-		long etGetGraph = t2.getTime() - t1.getTime();
-
-		System.out.println("\nTime to execute getGraphs = " + etGetGraph
-				/ 1000.0 + "seconds");
-
-		t1 = new Date();
-
-		// ---------- SSC Web Services code ----------
-
-		GraphRequest mapRequest = new GraphRequest();
-		mapRequest.getSatellites().add(satSpec);
-		mapRequest.setBeginTime(xmlStart);
-		mapRequest.setEndTime(xmlEnd);
-		mapRequest.setMapProjectionOptions(getTestMapOptions());
-
-		FileResult mapResult = ssc.getGraphs(mapRequest);
-		// ---------- end SSC Web Services code ----------
-
-		t2 = new Date();
-
-		if (mapResult.getStatusCode() == ResultStatusCode.ERROR) {
-
-			printResult("getGraphs", mapResult);
-
-			return;
-		}
-		System.out.println("\nMap getGraphs results:");
-		printFileResult("getGraphs", mapResult);
-
-		etGetGraph = t2.getTime() - t1.getTime();
-
-		System.out.println("\nTime to execute getGraphs = " + etGetGraph
-				/ 1000.0 + "seconds");
-
-		/* */
-		SatelliteSpecification aceSpec = new SatelliteSpecification();
-		aceSpec.setId("ace");
-		aceSpec.setResolutionFactor(1);
-		final XMLGregorianCalendar aceStart = datatypeFactory
-				.newXMLGregorianCalendar(2000, 7, 18, 0, 0, 0, 0, 0);
-		final XMLGregorianCalendar aceEnd = datatypeFactory
-				.newXMLGregorianCalendar(2000, 7, 20, 0, 0, 0, 0, 0);
-
-		t1 = new Date();
-
-		// ---------- SSC Web Services code ----------
-
-		GraphRequest timeSeriesRequest = new GraphRequest();
-		timeSeriesRequest.getSatellites().add(aceSpec);
-		timeSeriesRequest.setBeginTime(aceStart);
-		timeSeriesRequest.setEndTime(aceEnd);
-		timeSeriesRequest.setTimeSeriesOptions(getTestTimeSeriesOptions());
-
-		FileResult timeSeriesResult = ssc.getGraphs(timeSeriesRequest);
-		// ---------- end SSC Web Services code ----------
-
-		t2 = new Date();
-
-		if (timeSeriesResult.getStatusCode() == ResultStatusCode.ERROR) {
-
-			printResult("getGraphs", timeSeriesResult);
-
-			return;
-		}
-		System.out.println("\nTime Series getGraphs results:");
-		printFileResult("getGraphs", timeSeriesResult);
-
-		etGetGraph = t2.getTime() - t1.getTime();
-
-		System.out.println("\nTime to execute getGraphs = " + etGetGraph
-				/ 1000.0 + "seconds");
-		/* */
-
-		t1 = new Date();
-
-		// ---------- SSC Web Services code ----------
-		DataResult dataResult = ssc
-				.getData(getTestDataRequest(xmlStart, xmlEnd));
-		// ---------- end SSC Web Services code ----------
-
-		t2 = new Date();
-
 		if (dataResult.getStatusCode() == ResultStatusCode.ERROR) {
-
-			printResult("getData", dataResult);
-
-			return;
+			return null;
 		}
-		System.out.println("\ngetData results:");
 		printDataResult(dataResult);
-
-		long etGetData = t2.getTime() - t1.getTime();
-
-		System.out.println("\nTime to execute getData = " + etGetData / 1000.0
-				+ "seconds");
-
-		DataFileRequest testDataFileRequest = getTestDataRequest(xmlStart,
-				xmlEnd);
-
-		t1 = new Date();
-
-		// ---------- SSC Web Services code ----------
-		FileResult dataFileResult = ssc.getDataFiles(testDataFileRequest);
-		// ---------- end SSC Web Services code ----------
-
-		t2 = new Date();
-
-		if (dataFileResult.getStatusCode() == ResultStatusCode.ERROR) {
-
-			printResult("getDataFile", dataFileResult);
-
-			return;
-		}
-		printFileResult("getDataFile", dataFileResult);
-
-		long etGetDataFiles = t2.getTime() - t1.getTime();
-
-		System.out.println("\nTime to execute getDataFiles = " + etGetDataFiles
-				/ 1000.0 + "seconds");
-
-		FormatOptions testFormatOptions = testDataFileRequest
-				.getFormatOptions();
+		DataFileRequest testDataFileRequest = dataRequest(xmlStart,
+				xmlEnd, satelliteId);
+		FormatOptions testFormatOptions = testDataFileRequest.getFormatOptions();
 		testFormatOptions.setCdf(true);
 		testDataFileRequest.setFormatOptions(testFormatOptions);
-
-		t1 = new Date();
-
-		// ---------- SSC Web Services code ----------
-		dataFileResult = ssc.getDataFiles(testDataFileRequest);
-		// ---------- end SSC Web Services code ----------
-
-		t2 = new Date();
-
-		printFileResult("getDataFile", dataFileResult);
-
-		etGetDataFiles = t2.getTime() - t1.getTime();
-
-		System.out.println("\nTime to execute getDataFiles 2 = "
-				+ etGetDataFiles / 1000.0 + "seconds");
-
-	}
-
-	private static void printResult(String title, Result result) {
-
-		System.out.println("\n" + title + " results:");
-		System.out
-				.println("result.getStatusCode() = " + result.getStatusCode());
-		System.out.println("result.getStatusSubCode() = "
-				+ result.getStatusSubCode());
-
-		printStringArray(title + " status text", result.getStatusText());
-	}
-
-	private static void printFileResult(String title, FileResult result) {
-
-		printResult(title, result);
-
-		printStringArray(title + " URLs", result.getUrls());
-	}
-
-	private static void printStringArray(String title, List<String> strings) {
-
-		if (strings == null || strings.size() == 0) {
-
-			System.out.println("\n" + title + " is empty");
-		} else {
-
-			System.out.println("\n" + title + " returned:");
-
-			for (String string : strings) {
-
-				System.out.println("  " + string);
+		List<CoordinatePosition> coordinatePositions=new ArrayList<CoordinatePosition>();
+		
+		for (SatelliteData data : dataResult.getData()) {
+			CoordinatePosition coordinateData1=new CoordinatePosition();
+			CoordinatePosition coordinateData2=new CoordinatePosition();
+			coordinateData1.setDate(data.getTime().get(0).toString());
+			coordinateData2.setDate(data.getTime().get(1).toString());
+			for (CoordinateData point : data.getCoordinates()) {
+				List<Float> lat = point.getLatitude();
+				List<Float> lon = point.getLongitude();
+				coordinateData1.setLatitude(lat.get(0));
+				coordinateData1.setLongitude(lon.get(0));
+				coordinatePositions.add(coordinateData1);
+				coordinateData2.setLatitude(lat.get(1));
+				coordinateData2.setLongitude(lon.get(1));
+				coordinatePositions.add(coordinateData2);
 			}
+			return coordinatePositions;
 		}
+		return null;
 	}
 
 	private static void printDataResult(DataResult result) {
 
-		printResult("Data", result);
-
 		List<SatelliteData> data = result.getData();
-
 		if (data == null || data.size() == 0) {
-
 			System.out.println("No satellite data");
 			return;
 		} else {
-
 			System.out.println("data.length = " + data.size());
 			System.out.println("Satellite Data:");
 		}
 
 		int numValues = 5;
-
 		for (SatelliteData datum : data) {
-
 			print(datum);
 		}
 	}
 
 	private static void print(SatelliteData data) {
-
 		System.out.println("  " + data.getId());
 
 		List<XMLGregorianCalendar> time = data.getTime();
@@ -812,21 +627,17 @@ public class WsClient {
 	}
 
 	/**
-	 * Provides a test DataRequest.
+	 * Provides a DataRequest.
+	 * @param satelliteId TODO
 	 * 
-	 * @return a test DataRequest
+	 * @return a DataRequest
 	 */
-	private static DataFileRequest getTestDataRequest(
-			XMLGregorianCalendar startDate, XMLGregorianCalendar endDate) {
+	private static DataFileRequest dataRequest(XMLGregorianCalendar startDate, XMLGregorianCalendar endDate, String satelliteId) {
 
 		SatelliteSpecification fastSat = new SatelliteSpecification();
 		// fast satellite spec.
-		fastSat.setId("aim");
+		fastSat.setId(satelliteId);
 		fastSat.setResolutionFactor(2);
-		SatelliteSpecification moonSat = new SatelliteSpecification();
-		// moon satellite spec.
-		moonSat.setId("moon");
-		moonSat.setResolutionFactor(2);
 
 		SpaceRegionsFilterOptions spaceRegionsFilter = new SpaceRegionsFilterOptions();
 		// space regions filter options
