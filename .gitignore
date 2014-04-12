@@ -1,0 +1,5 @@
+client/app/config/config.php
+client/node_modules/*
+client/vendor/*
+*.swp
+
