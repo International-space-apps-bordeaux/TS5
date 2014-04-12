@@ -25,9 +25,9 @@ public interface SatelliteSituationCenterInterface {
      * @param arg0
      * @return
      *     returns org.nasa.ws.proxy.DataResult
-     * @throws SSCDatabaseLockedException_Exception
      * @throws SSCResourceLimitExceededException_Exception
      * @throws SSCExternalException_Exception
+     * @throws SSCDatabaseLockedException_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")
@@ -101,8 +101,8 @@ public interface SatelliteSituationCenterInterface {
      * @return
      *     returns org.nasa.ws.proxy.FileResult
      * @throws SSCResourceLimitExceededException_Exception
-     * @throws SSCDatabaseLockedException_Exception
      * @throws SSCExternalException_Exception
+     * @throws SSCDatabaseLockedException_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")
@@ -119,9 +119,9 @@ public interface SatelliteSituationCenterInterface {
      * @param arg0
      * @return
      *     returns org.nasa.ws.proxy.FileResult
-     * @throws SSCDatabaseLockedException_Exception
-     * @throws SSCResourceLimitExceededException_Exception
      * @throws SSCExternalException_Exception
+     * @throws SSCResourceLimitExceededException_Exception
+     * @throws SSCDatabaseLockedException_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")

@@ -16,7 +16,7 @@ import javax.xml.ws.WebServiceException;
  * Generated source version: 2.0
  * 
  */
-@WebServiceClient(name = "SatelliteSituationCenterService", targetNamespace = "http://ssc.spdf.gsfc.nasa.gov/", wsdlLocation = "file:/Users/Aurore/Documents/workspace/TddMonkey/WebServiceClient/src/main/resources/wsdl/nasa.wsdl")
+@WebServiceClient(name = "SatelliteSituationCenterService", targetNamespace = "http://ssc.spdf.gsfc.nasa.gov/", wsdlLocation = "file:/Users/Aurore/Documents/workspace/TddMonkey/FollowSat/server/src/main/resources/wsdl/nasa.wsdl")
 public class SatelliteSituationCenterService
     extends Service
 {
@@ -29,7 +29,7 @@ public class SatelliteSituationCenterService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/Users/Aurore/Documents/workspace/TddMonkey/WebServiceClient/src/main/resources/wsdl/nasa.wsdl");
+            url = new URL("file:/Users/Aurore/Documents/workspace/TddMonkey/FollowSat/server/src/main/resources/wsdl/nasa.wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
