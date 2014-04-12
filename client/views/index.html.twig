@@ -4,5 +4,15 @@
 {% block main_container %}
     <div class="row">
         <div id="map" class="col-md-10 col-md-offset-1"></div>
+        <p>Currently tracking <span></span></p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <ul class="list-unstyled" id="sat-list">
+                <li data-idsat="iss">ISS</li>
+                <li data-idsat="hst">Hubble Space Telescope</li>
+            </ul>
+        </div>
     </div>
 {% endblock %}

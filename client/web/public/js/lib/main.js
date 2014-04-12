@@ -1,8 +1,15 @@
 var map;
 
 var app = {
-    init: function() {
+    satId: "iss",
 
+    init: function() {
+        this.createMap();
+        this.bindList();
+        this.liveUpdatePosition();
+    },
+
+    createMap: function() {
         var mapOptions = {
             center: new google.maps.LatLng(-34.397, 150.644),
             zoom: 6,
@@ -12,8 +19,16 @@ var app = {
             document.getElementById("map"),
             mapOptions
         );
+    },
 
-        this.liveUpdatePosition();
+    bindList: function() {
+        var _this = this;
+        $('#sat-list li').each(function(k, el){
+            $(el).click(function() {
+                _this.satId = $(this).data('idsat');
+                console.info('Selected sat : '+_this.satId);
+            })
+        });
     },
 
     liveUpdatePosition: function() {
@@ -31,6 +46,8 @@ var app = {
 
     getPosition: function() {
         var _this = this;
+
+        var url = "http://"+this.satId;
 
         $.getJSON('http://api.open-notify.org/iss-now.json?callback=?', function(data) {
             var lat = data['iss_position']['latitude'];

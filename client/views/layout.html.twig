@@ -27,7 +27,7 @@
 
         {% if app.debug %}
             <script src="{{ app.request.basepath }}/public/js/lib/main.js"></script>
-            <script src="http://localhost:35729/livereload.js"></script>
+            <script src="{{ app.request.basepath }}:35729/livereload.js"></script>
         {% else %}
             <script src="{{ app.request.basepath }}/public/js/build/main.min.js"></script>
         {%endif %}
