@@ -44,6 +44,7 @@ var app = {
         //Start requesting satellite position each 2 minutes
         var _this = this;
         this.cleanOrbits();
+        this.clearTimer();
         setInterval(function() {
             _this.getPositions();
         }, 120000);
@@ -108,9 +109,7 @@ var app = {
             console.info('Data from server');
             console.log(data);
 
-            if(_this.timer) {
-                clearInterval(_this.timer);
-            }
+            _this.clearTimer();
             _this.thick = 0;
 
             var t1 = data[0];
@@ -152,6 +151,12 @@ var app = {
         paths.push(orbitPath)
 
         orbitPath.setMap(map);
+    },
+
+    clearTimer: function() {
+        if(this.timer) {
+            clearInterval(this.timer);
+        }
     }
 
 }
