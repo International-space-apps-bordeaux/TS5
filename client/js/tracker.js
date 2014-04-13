@@ -30,15 +30,17 @@ var app = {
         var _this = this;
         $('#sat-list li').click(function(k, el){
 
-                $('#sat-list li').removeClass('selected');
-                _this.satId = $(this).data('idsat');
-                _this.way   = $(this).data('way');
-                _this.liveUpdatePosition();
-                $('.description').css('display', 'none');
-                $('#'+_this.satId).css('display', 'block');
-                $('#current-sat').html($(this).html());
-                $(this).addClass('selected');
-                $('#load').css('display', 'block');
+            //Data retrieving
+            _this.satId = $(this).data('idsat');
+            _this.way   = $(this).data('way');
+            _this.liveUpdatePosition();
+            //Display
+            $('#sat-list li').removeClass('selected');
+            $('.description').css('display', 'none');
+            $('#'+_this.satId).css('display', 'block');
+            $('#current-sat').html($(this).html());
+            $(this).addClass('selected');
+            $('#load').css('display', 'block');
 
         });
     },
@@ -160,9 +162,8 @@ var app = {
             strokeWeight: 2
         });
 
-        paths.push(orbitPath)
-
         orbitPath.setMap(map);
+        paths.push(orbitPath);
     },
 
     clearTimer: function() {
