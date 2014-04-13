@@ -80,11 +80,16 @@ var app = {
 
         this.cleanMarkers();
 
+        var icon = {
+            url: window.picto,
+            anchor: new google.maps.Point(32, 32)
+        };
+
         var marker = new google.maps.Marker({
             position: latLng,
             map: map,
             title: this.satId,
-            icon: window.picto
+            icon: icon
         });
 
         markers.push(marker);
@@ -147,7 +152,7 @@ var app = {
         var orbitPath = new google.maps.Polyline({
             path: orbitCoordinates,
             geodesic: true,
-            strokeColor: '#FF0000',
+            strokeColor: '#FFF',
             strokeOpacity: 1.0,
             strokeWeight: 2
         });
