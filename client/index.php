@@ -35,21 +35,21 @@ $baseUrl = "";
       </div>
       <div id="document">
 	<div id="iss" class="description">
-	<p>
-The International Space Station (ISS) is a space station, a habitable artificial satellite in low Earth orbit. The ISS serves as a microgravity and space environment research laboratory in which crew members conduct experiments in biology, human biology, physics, astronomy, meteorology and other fields. The station is suited for the testing of spacecraft systems and equipment required for missions to the Moon and Mars.
-	</p>
+	  <p>	The International Space Station (ISS) is a space station, a habitable artificial satellite in low Earth orbit. The ISS serves as a microgravity and space environment research laboratory in which crew members conduct experiments in biology, human biology, physics, astronomy, meteorology and other fields.</br>The station is suited for the testing of spacecraft systems and equipment required for missions to the Moon and Mars.
+	  </p>
 	</div>
 	<div id="aim" class="description">
-	<p>
-The Aeronomy of Ice in the Mesosphere (AIM) satellite mission is exploring Polar Mesospheric Clouds (PMCs), also called noctilucent clouds, to find out why they form and why they are changing. 
-
-The primary goal of the AIM mission is to help scientists understand whether the clouds' ephemeral nature, and their variation over time, is related to Earth's changing climate - and to investigate why they form in the first place. By measuring the thermal, chemical and other properties of the environment in which the mysterious clouds form, the AIM mission will provide researchers with a foundation for the study of long-term variations in the mesosphere and its relationship to global climate change. In addition to measuring environmental conditions, the AIM mission will collect data on cloud abundance, how the clouds are distributed, and the size of particles within them.
-	</p>
+	  <p>	The Aeronomy of Ice in the Mesosphere (AIM) satellite mission is exploring Polar Mesospheric Clouds (PMCs), also called noctilucent clouds, to find out why they form and why they are changing.
+	    The primary goal of the AIM mission is to help scientists understand whether the clouds' ephemeral nature, and their variation over time, is related to Earth's changing climate - and to investigate why they form in the first place. By measuring the thermal, chemical and other properties of the environment in which the mysterious clouds form, the AIM mission will provide researchers with a foundation for the study of long-term variations in the mesosphere and its relationship to global climate change.
+	    In addition to measuring environmental conditions, the AIM mission will collect data on cloud abundance, how the clouds are distributed, and the size of particles within them.
+	  </p>
 	</div>
 	<div id="fast" class="description">
-	<p>
-The FAST (Fast Auroral Snapshot Explorer) satellite is a highly sophisticated scientific satellite designed to carry out in situ measurements of acceleration physics and related plasma processes associated with the Earth's aurora.  Initiated and conceptualized by scientists at the University of California at Berkeley, is designed to carry out small, highly focused, scientific investigations. The spacecraft design was tailored to take high-resolution data samples (or "snapshots") only while it crosses the auroral zones, which are latitudinally narrow sectors that encircle the polar regions of the Earth.  FAST's primary objective is to study the microphysics of space plasma and the accelerated particles that cause the aurora.</br>FAST was launched on August 21, 1996 into a high inclination (83o) elliptical orbit with apogee and perigee altitudes of 4175 km and 350 km, respectively.
-	</p>
+	  <p>	The FAST (Fast Auroral Snapshot Explorer) satellite is a highly sophisticated scientific satellite designed to carry out in situ measurements of acceleration physics and related plasma processes associated with the Earth's aurora.  Initiated and conceptualized by scientists at the University of California at Berkeley, is designed to carry out small, highly focused, scientific investigations.
+	    The spacecraft design was tailored to take high-resolution data samples (or "snapshots") only while it crosses the auroral zones, which are latitudinally narrow sectors that encircle the polar regions of the Earth.
+	    FAST's primary objective is to study the microphysics of space plasma and the accelerated particles that cause the aurora.
+	    FAST was launched on August 21, 1996 into a high inclination (83o) elliptical orbit with apogee and perigee altitudes of 4175 km and 350 km, respectively.
+	  </p>
 	</div>
       </div>
 
