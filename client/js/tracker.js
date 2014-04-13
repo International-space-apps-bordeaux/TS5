@@ -25,16 +25,17 @@ var app = {
             mapOptions
         );
     },
-    
+
     bindList: function() {
         var _this = this;
-        $('#sat-list li').each(function(k, el){
-            $(el).click(function() {
-                _this.satId = $(this).data('idsat');
-                _this.way   = $(this).data('way');
-                _this.liveUpdatePosition();
-                $('#current-sat').html($(this).html());
-            })
+        $('#sat-list li').click(function(k, el){
+            $('#sat-list li').removeClass('selected');
+            _this.satId = $(this).data('idsat');
+            _this.way   = $(this).data('way');
+            _this.liveUpdatePosition();
+            $('#current-sat').html($(this).html());
+            $(this).addClass('selected');
+
         });
     },
 
