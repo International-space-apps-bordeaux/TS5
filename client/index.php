@@ -31,7 +31,7 @@ $baseUrl = "";
 	    <ul id="sat-list">
               <li class="selected" data-idsat="iss" data-way="1"><p>ISS</p></li>
               <li data-idsat="aim" data-way="0"><p>AIM</p></li>
-              <li data-idsat="fast" data-way="0"><p>Fast</p></li>
+              <li data-idsat="fast" data-way="1"><p>Fast</p></li>
             </ul>
 	  </div>
 	</div>
