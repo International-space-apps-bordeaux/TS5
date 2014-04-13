@@ -5,7 +5,7 @@ body {
     width:100%;
     background-color:#AEC2DF;
     font-family:"arial";
-    font-size:22px;
+    font-size:20px;
 }
 
 #container {
@@ -61,6 +61,11 @@ body {
     vertical-align: middle;
 }
 
+
+#sat-list:hover {
+    cursor:pointer;
+}
+
 #sat-list li {
     width: 145px;
     height: 60px;
@@ -73,11 +78,9 @@ body {
 }
 
 #document {
-    font-size: 28px;
+    font-size: 32px;
     margin-right:auto;
     margin-left:auto;
-    height:460px;
-    overflow-y:scroll;
     width:80%;
     color:#4AA14A;
 }
