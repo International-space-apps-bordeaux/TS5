@@ -83,7 +83,8 @@ var app = {
         var marker = new google.maps.Marker({
             position: latLng,
             map: map,
-            title: this.satId
+            title: this.satId,
+            icon: window.picto
         });
 
         markers.push(marker);
