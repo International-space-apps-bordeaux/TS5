@@ -29,12 +29,13 @@ var app = {
     bindList: function() {
         var _this = this;
         $('#sat-list li').click(function(k, el){
-            $('#sat-list li').removeClass('selected');
-            _this.satId = $(this).data('idsat');
-            _this.way   = $(this).data('way');
-            _this.liveUpdatePosition();
-            $('#current-sat').html($(this).html());
-            $(this).addClass('selected');
+
+                $('#sat-list li').removeClass('selected');
+                _this.satId = $(this).data('idsat');
+                _this.way   = $(this).data('way');
+                _this.liveUpdatePosition();
+                $('#current-sat').html($(this).html());
+                $(this).addClass('selected');
 
         });
     },
@@ -115,7 +116,7 @@ var app = {
             var t1 = data[0];
             var t2 = data[1];
 
-            _this.printOrbit(t1, t2);
+            _this.printOrbit(data);
 
             _this.t1 = t1;
             _this.t2 = t2;
@@ -126,16 +127,22 @@ var app = {
         });
     },
 
-    printOrbit: function(pos1, pos2) {
+    printOrbit: function(positions) {
+        var pos1 = positions[0];
+        var pos2 = positions[1];
         var latLng2 = new google.maps.LatLng(pos2.latitude, pos2.longitude);
 
-
-        var OrbitCoordinates = [
+        var orbitCoordinates = [
             new google.maps.LatLng(pos1.latitude, pos1.longitude),
             new google.maps.LatLng(pos2.latitude, pos2.longitude)
         ];
+        for(var i in positions) {
+            orbitCoordinates.push(
+                new google.maps.LatLng(positions[i].latitude, positions[i].longitude)
+            );
+        }
         var orbitPath = new google.maps.Polyline({
-            path: OrbitCoordinates,
+            path: orbitCoordinates,
             geodesic: true,
             strokeColor: '#FF0000',
             strokeOpacity: 1.0,
