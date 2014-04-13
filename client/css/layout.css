@@ -3,7 +3,7 @@ body {
     padding:0;
     height:100%;
     width:100%;
-    background-color:#AEC2DF;
+    background-color:#34343E;
     font-family:"arial";
     font-size:20px;
 }
@@ -82,5 +82,13 @@ body {
     margin-right:auto;
     margin-left:auto;
     width:80%;
-    color:#4AA14A;
+    color:white;
+}
+
+.description {
+    display:none;
+}
+
+#iss {
+    display:block;
 }
