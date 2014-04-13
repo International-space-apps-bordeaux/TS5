@@ -38,6 +38,7 @@ var app = {
                 $('#'+_this.satId).css('display', 'block');
                 $('#current-sat').html($(this).html());
                 $(this).addClass('selected');
+                $('#load').css('display', 'block');
 
         });
     },
@@ -128,6 +129,8 @@ var app = {
 
             _this.t1 = t1;
             _this.t2 = t2;
+
+            $('#load').css('display', 'none');
 
             _this.timer = setInterval(function() {
                 _this.updatePosition();

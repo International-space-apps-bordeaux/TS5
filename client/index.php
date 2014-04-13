@@ -19,7 +19,7 @@ $baseUrl = "";
 <body>
     
     <div id="container">
-
+      <div id="load"><img src="load.gif" /></div>
       <div id="map" class="col-md-10 col-md-offset-1"></div>
       
       <div id="up-menu">
