@@ -34,6 +34,8 @@ var app = {
                 _this.satId = $(this).data('idsat');
                 _this.way   = $(this).data('way');
                 _this.liveUpdatePosition();
+                $('.description').css('display', 'none');
+                $('#'+_this.satId).css('display', 'block');
                 $('#current-sat').html($(this).html());
                 $(this).addClass('selected');
 
@@ -44,6 +46,7 @@ var app = {
         //Start requesting satellite position each 2 minutes
         var _this = this;
         this.cleanOrbits();
+        this.cleanMarkers();
         this.clearTimer();
         setInterval(function() {
             _this.getPositions();
