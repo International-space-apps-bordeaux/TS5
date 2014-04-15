@@ -1,5 +1,5 @@
 <?php
-$baseUrl = "";
+$baseUrl = "spope/spaceapps";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,13 +7,13 @@ $baseUrl = "";
     <meta charset="UTF-8">
     <title>Follow Sat</title>
 <script type="text/javascript">
-    var picto = "http://<?php echo $_SERVER['SERVER_NAME']."/".$baseUrl; ?>FollowSat/client/picto.png";
+    var picto = "http://<?php echo $_SERVER['SERVER_NAME']."/".$baseUrl; ?>/client/picto.png";
 </script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <link href="http://<?php echo $_SERVER['SERVER_NAME']."/".$baseUrl; ?>FollowSat/client/css/layout.css" rel="stylesheet" media="screen">
+        <link href="http://<?php echo $_SERVER['SERVER_NAME']."/".$baseUrl; ?>/client/css/layout.css" rel="stylesheet" media="screen">
 
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYOgoKO_QD7cFxGwfqenxkch9SZlU59bU&sensor=false"></script>
-        <script src="http://<?php echo $_SERVER['SERVER_NAME']."/".$baseUrl; ?>FollowSat/client/js/tracker.js"></script>
+        <script src="http://<?php echo $_SERVER['SERVER_NAME']."/".$baseUrl; ?>/client/js/tracker.js"></script>
 	<link rel="icon" href="favicon.ico"/>
 </head>
 <body>

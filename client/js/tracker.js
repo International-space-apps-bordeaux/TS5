@@ -114,7 +114,8 @@ var app = {
     getPositions: function() {
         var _this = this;
 
-        var url = "http://10.33.0.33:8080/SatelliteServiceClient/api/satellites/trajectory/"+this.satId;
+        //var url = "http://10.33.0.33:8080/SatelliteServiceClient/api/satellites/trajectory/"+this.satId;
+        var url = "http://localhost/spope/spaceapps/client/temp.php?sat="+this.satId;
 
         $.getJSON(url, function(data) {
 
